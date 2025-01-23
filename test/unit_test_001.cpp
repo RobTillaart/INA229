@@ -2,8 +2,8 @@
 //    FILE: unit_test_001.cpp
 //  AUTHOR: Rob Tillaart
 //    DATE: 2021-05-18
-// PURPOSE: unit tests for the INA239 library
-//          https://github.com/RobTillaart/INA239
+// PURPOSE: unit tests for the INA229 library
+//          https://github.com/RobTillaart/INA229
 //          https://github.com/Arduino-CI/arduino_ci/blob/master/REFERENCE.md
 //
 
