@@ -149,22 +149,24 @@ Not tested with hardware, feedback welcome.
 Run **INA229_performance.ino** sketch to get a first indication.
 Numbers below are based upon tests with no hardware (SPI allows that).
 
-Time in micros, SPI speed in MHz, Arduino UNO.
+Time in micros, HardWare SPI speed in MHz, Arduino UNO (indicative).
 
 |  SPI  |  function         |  time  |  notes  |
 |:-----:|:------------------|:------:|:-------:|
-|  1.0  |  getBusVoltage    |        |  100%
-|  1.0  |  getShuntVoltage  |        |
-|  1.0  |  getCurrent       |        |
-|  1.0  |  getPower         |        |
-|  1.0  |  getTemperature   |        |
+|  1.0  |  getBusVoltage    |   68   |  100%
+|  1.0  |  getShuntVoltage  |  116   |
+|  1.0  |  getCurrent       |   68   |
+|  1.0  |  getPower         |   80   |
+|  1.0  |  getTemperature   |   56   |
+|  1.0  |  getEnergy        |  184   |
+|  1.0  |  getCharge        |  176   |
 |       |                   |        |  other functions similar gain.
-|  2.0  |  getBusVoltage    |        |
-|  4.0  |  getBusVoltage    |        |
-|  8.0  |  getBusVoltage    |        |
+|  2.0  |  getBusVoltage    |   52   |  24% faster
+|  4.0  |  getBusVoltage    |   44   |  36% faster
+|  8.0  |  getBusVoltage    |   44   |  36% faster
 
 
-Most non core functions are as fast as **getTemperature()**
+Most non core functions are as fast as **getTemperature()** or better.
 
 
 ## Interface
