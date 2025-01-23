@@ -112,7 +112,7 @@ bool INA229::begin()
 //
 //  CORE FUNCTIONS
 //
-//  PAGE 22
+//  PAGE 23 + PAGE 5
 float INA229::getBusVoltage()
 {
   //  always positive, remove reserved bits.
@@ -122,7 +122,7 @@ float INA229::getBusVoltage()
   return voltage;
 }
 
-//  PAGE 22
+//  PAGE 23
 float INA229::getShuntVoltage()
 {
   //  shunt_LSB depends on ADCRANGE in INA229_CONFIG register.
@@ -143,7 +143,7 @@ float INA229::getShuntVoltage()
   return voltage;
 }
 
-//  PAGE 23 + 8.1.2
+//  PAGE 24 + 8.1.2
 float INA229::getCurrent()
 {
   //  remove reserved bits.
@@ -157,7 +157,7 @@ float INA229::getCurrent()
   return current;
 }
 
-//  PAGE 23 + 8.1.2
+//  PAGE 24 + 8.1.2
 float INA229::getPower()
 {
   uint32_t value = _readRegister(INA229_POWER, 3);
@@ -173,7 +173,7 @@ float INA229::getTemperature()
   return value * LSB;
 }
 
-//  PAGE 26 + 8.1.2
+//  PAGE 24 + 8.1.2
 double INA229::getEnergy()
 {
   //  read 40 bit unsigned as a double to prevent 64 bit ints
@@ -185,7 +185,7 @@ double INA229::getEnergy()
 }
 
 
-//  PAGE 26 + 8.1.2
+//  PAGE 24 + 8.1.2
 double INA229::getCharge()
 {
   //  read 40 bit unsigned as a float to prevent 64 bit ints
@@ -225,7 +225,7 @@ bool INA229::getAccumulation()
   return (value & INA229_CFG_RSTACC) > 0;
 }
 
-//  PAGE 20 DONE
+//  PAGE 20
 void INA229::setConversionDelay(uint8_t steps)
 {
   uint16_t value = _readRegister(INA229_CONFIG, 2);
@@ -254,7 +254,7 @@ bool INA229::getTemperatureCompensation()
   return (value & INA229_CFG_TEMPCOMP) > 0;
 }
 
-//  PAGE 20 DONE
+//  PAGE 20
 void INA229::setADCRange(bool flag)
 {
   uint16_t value = _readRegister(INA229_CONFIG, 2);
@@ -274,7 +274,7 @@ bool INA229::getADCRange()
 //
 //  CONFIG ADC REGISTER 1
 //
-//  PAGE 21 + 22 DONE
+//  PAGE 21 + 22
 bool INA229::setMode(uint8_t mode)
 {
   if (mode > 0x0F) return false;
@@ -360,7 +360,7 @@ uint8_t INA229::getAverage()
 //
 //  SHUNT CALIBRATION REGISTER 2
 //
-//  PAGE 28 8.1.2
+//  PAGE 22 + 8.1.2
 int INA229::setMaxCurrentShunt(float maxCurrent, float shunt)
 {
   //  Shunt can be really small
@@ -403,6 +403,7 @@ float INA229::getCurrentLSB()
 //
 //  SHUNT TEMPERATURE COEFFICIENT REGISTER 3
 //
+//  PAGE 23
 bool INA229::setShuntTemperatureCoefficent(uint16_t ppm)
 {
   if (ppm > 16383) return false;
@@ -421,7 +422,7 @@ uint16_t INA229::getShuntTemperatureCoefficent()
 //
 //  DIAGNOSE ALERT REGISTER 11
 //
-//  PAGE 23 DONE
+//  PAGE 25
 void INA229::setDiagnoseAlert(uint16_t flags)
 {
   _writeRegister(INA229_DIAG_ALERT, flags);
@@ -469,7 +470,7 @@ uint16_t INA229::getDiagnoseAlertBit(uint8_t bit)
 //  THRESHOLD AND LIMIT REGISTERS 12-17
 //
 //  TODO - API also for INA228
-//  PAGE 25 - minimalistic
+//  PAGE 26 - minimalistic
 void INA229::setShuntOvervoltageTH(uint16_t threshold)
 {
   //  TODO ADCRANGE DEPENDENT
@@ -534,14 +535,14 @@ uint16_t INA229::getTemperatureOverLimitTH()
 
 void INA229::setPowerOverLimitTH(uint16_t threshold)
 {
-  //  P 26
+  //  PAGE 28
   //  Conversion factor: 256 × Power LSB.
   _writeRegister(INA229_POWER_LIMIT, threshold);
 }
 
 uint16_t INA229::getPowerOverLimitTH()
 {
-  //  P 26
+  //  PAGE 28
   //  Conversion factor: 256 × Power LSB.
   return _readRegister(INA229_POWER_LIMIT, 2);
 }
@@ -551,6 +552,7 @@ uint16_t INA229::getPowerOverLimitTH()
 //
 //  MANUFACTURER and ID REGISTER 3E/3F
 //
+//  PAGE 28
 uint16_t INA229::getManufacturer()
 {
   uint16_t value = _readRegister(INA229_MANUFACTURER, 2);
