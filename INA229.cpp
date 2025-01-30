@@ -105,9 +105,7 @@ bool INA229::begin()
     digitalWrite(_clock,   LOW);
   }
 
-  uint16_t value = _readRegister(INA229_CONFIG, 2);
-  _ADCRange = (value & INA229_CFG_ADCRANGE) > 0;
-
+  getADCRange();
   return true;
 }
 
@@ -288,6 +286,8 @@ void INA229::setADCRange(bool flag)
 
 bool INA229::getADCRange()
 {
+  uint16_t value = _readRegister(INA229_CONFIG, 2);
+  _ADCRange = (value & INA229_CFG_ADCRANGE) > 0;
   return _ADCRange;
 }
 
