@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
 ## [0.1.1] - 2025-01-30
-- fix #3, support for **int32 getShuntVoltageXXXXX()**
+- fix #3, support for **int32 getShuntVoltageADCValue()**
 - cache ADCrange to improve **getShuntVoltage()**
 - minor edits
 
