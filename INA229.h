@@ -159,6 +159,7 @@ public:
   double   getCoulomb()         { return getCharge(); };
   double   getMilliCoulomb()    { return getCharge()       * 1e3; };
   double   getMicroCoulomb()    { return getCharge()       * 1e6; };
+
   //
   //  CONFIG REGISTER 0
   //  read datasheet for details, section 7.6.1.1, page 21
@@ -174,7 +175,7 @@ public:
   bool     getTemperatureCompensation();
   //  flag = false => 164 mV, true => 41 mV
   void     setADCRange(bool flag);
-  bool     getADCRange();
+  bool     getADCRange();  //  from cache
 
   //
   //  CONFIG ADC REGISTER 1
