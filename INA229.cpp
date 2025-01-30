@@ -1,6 +1,6 @@
 //    FILE: INA229.cpp
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.1.0
+// VERSION: 0.1.1
 //    DATE: 2025-01-22
 // PURPOSE: Arduino library for the INA229, SPI, 20 bit, voltage, current and power sensor.
 //     URL: https://github.com/RobTillaart/INA229
@@ -104,6 +104,10 @@ bool INA229::begin()
     digitalWrite(_dataOut, LOW);
     digitalWrite(_clock,   LOW);
   }
+
+  uint16_t value = _readRegister(INA229_CONFIG, 2);
+  _ADCRange = (value & INA229_CFG_ADCRANGE) > 0;
+
   return true;
 }
 
@@ -127,7 +131,7 @@ float INA229::getShuntVoltage()
 {
   //  shunt_LSB depends on ADCRANGE in INA229_CONFIG register.
   float shunt_LSB = 312.5e-9;  //  312.5 nV
-  if (getADCRange() == 1)
+  if (getADCRange() == true)
   {
     shunt_LSB = 78.125e-9;     //  78.125 nV
   }
@@ -265,8 +269,9 @@ void INA229::setADCRange(bool flag)
 
 bool INA229::getADCRange()
 {
-  uint16_t value = _readRegister(INA229_CONFIG, 2);
-  return (value & INA229_CFG_ADCRANGE) > 0;
+  return _ADCRange;
+  //  uint16_t value = _readRegister(INA229_CONFIG, 2);
+  //  return (value & INA229_CFG_ADCRANGE) > 0;
 }
 
 
@@ -372,7 +377,7 @@ int INA229::setMaxCurrentShunt(float maxCurrent, float shunt)
   //  PAGE 31 (8.1.2)
   float shunt_cal = 13107.2e6 * _current_LSB * _shunt;
   //  depends on ADCRANGE in INA229_CONFIG register.
-  if (getADCRange() == 1)
+  if (getADCRange() == true)
   {
     shunt_cal *= 4;
   }
