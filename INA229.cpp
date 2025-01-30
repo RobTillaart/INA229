@@ -131,7 +131,7 @@ float INA229::getShuntVoltage()
 {
   //  shunt_LSB depends on ADCRANGE in INA229_CONFIG register.
   float shunt_LSB = 312.5e-9;  //  312.5 nV
-  if (getADCRange() == true)
+  if (_ADCRange == true)
   {
     shunt_LSB = 78.125e-9;     //  78.125 nV
   }
@@ -145,6 +145,22 @@ float INA229::getShuntVoltage()
   }
   float voltage = value * shunt_LSB;
   return voltage;
+}
+
+int32_t INA229::getShuntVoltageADCValue()
+{
+  //  remove reserved bits.
+  uint32_t value = _readRegister(INA229_SHUNT_VOLTAGE, 3) >> 4;
+  //  handle negative values (20 bit)
+  if (value & 0x00080000)
+  {
+    value |= 0xFFF00000;
+  }
+  if (_ADCRange == true)
+  {
+    value /= 4;
+  }
+  return (int32_t)value;
 }
 
 //  PAGE 24 + 8.1.2
@@ -180,7 +196,7 @@ float INA229::getTemperature()
 //  PAGE 24 + 8.1.2
 double INA229::getEnergy()
 {
-  //  read 40 bit unsigned as a double to prevent 64 bit ints
+  //  read 40 bit unsigned as a double to prevent 64 bit integers
   //  double might be 8 or 4 byte, depends on platform
   //  40 bit ==> O(10^12)
   double value = _readRegisterF(INA229_ENERGY, 5);
@@ -192,7 +208,7 @@ double INA229::getEnergy()
 //  PAGE 24 + 8.1.2
 double INA229::getCharge()
 {
-  //  read 40 bit unsigned as a float to prevent 64 bit ints
+  //  read 40 bit unsigned as a float to prevent 64 bit integers
   //  double might be 8 or 4 byte, depends on platform
   //  40 bit ==> O(10^12)
   double value = _readRegisterF(INA229_CHARGE, 5);
@@ -217,8 +233,8 @@ bool INA229::setAccumulation(uint8_t value)
 {
   if (value > 1) return false;
   uint16_t reg = _readRegister(INA229_CONFIG, 2);
-  reg &= ~INA229_CFG_RSTACC;
   if (value == 1) reg |= INA229_CFG_RSTACC;
+  else            reg &= ~INA229_CFG_RSTACC;
   _writeRegister(INA229_CONFIG, reg);
   return true;
 }
@@ -247,8 +263,8 @@ uint8_t INA229::getConversionDelay()
 void INA229::setTemperatureCompensation(bool on)
 {
   uint16_t value = _readRegister(INA229_CONFIG, 2);
-  value &= ~INA229_CFG_TEMPCOMP;
   if (on) value |= INA229_CFG_TEMPCOMP;
+  else    value &= ~INA229_CFG_TEMPCOMP;
   _writeRegister(INA229_CONFIG, value);
 }
 
@@ -261,17 +277,18 @@ bool INA229::getTemperatureCompensation()
 //  PAGE 20
 void INA229::setADCRange(bool flag)
 {
+  //  if (flag == _ADCRange) return;
+  _ADCRange = flag;
   uint16_t value = _readRegister(INA229_CONFIG, 2);
-  value &= ~INA229_CFG_ADCRANGE;
   if (flag) value |= INA229_CFG_ADCRANGE;
+  else      value &= ~INA229_CFG_ADCRANGE;
+  //  if value has not changed we do not need to write it back.
   _writeRegister(INA229_CONFIG, value);
 }
 
 bool INA229::getADCRange()
 {
   return _ADCRange;
-  //  uint16_t value = _readRegister(INA229_CONFIG, 2);
-  //  return (value & INA229_CFG_ADCRANGE) > 0;
 }
 
 
@@ -377,7 +394,7 @@ int INA229::setMaxCurrentShunt(float maxCurrent, float shunt)
   //  PAGE 31 (8.1.2)
   float shunt_cal = 13107.2e6 * _current_LSB * _shunt;
   //  depends on ADCRANGE in INA229_CONFIG register.
-  if (getADCRange() == true)
+  if (_ADCRange)
   {
     shunt_cal *= 4;
   }
@@ -603,7 +620,7 @@ bool INA229::usesHWSPI()
 
 ////////////////////////////////////////////////////////
 //
-//  SHOULD BE PROTECTED
+//  PRIVATE
 //
 uint32_t INA229::_readRegister(uint8_t reg, uint8_t bytes)  //  bytes = 2 or 3.
 {
@@ -696,11 +713,6 @@ uint16_t INA229::_writeRegister(uint8_t reg, uint16_t value)
   return 0;
 }
 
-
-/////////////////////////////////////////////////////////////////////////////
-//
-//  PROTECTED
-//
 
 uint8_t INA229::swSPI_transfer(uint8_t value)
 {

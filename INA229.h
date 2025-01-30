@@ -123,6 +123,10 @@ public:
   float    getShuntMilliVolt()  { return getShuntVoltage() * 1e3; };
   float    getShuntMicroVolt()  { return getShuntVoltage() * 1e6; };
 
+  //  raw integer interface.
+  int32_t  getShuntVoltageADCValue();
+
+
   //       SHUNT CURRENT
   float    getCurrent();        //  Ampere
   float    getAmpere()          { return getCurrent(); };

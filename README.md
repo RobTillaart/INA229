@@ -199,6 +199,8 @@ Note the value can be positive or negative as the INA229 is bidirectional.
 - **float getShuntVolt()**
 - **float getShuntMilliVolt()**
 - **float getShuntMicroVolt()**
+- **int32_t getShuntVoltageADCValue()** integer version requested in issue #3.
+Returns raw ADC bits, converted for ADCrange.
 
 ### SHUNT CURRENT
 
@@ -265,7 +267,7 @@ Read datasheet for details, section 7.6.1.1, page 22
 - **void setTemperatureCompensation(bool on)** see Shunt temperature coefficient below.
 - **bool getTemperatureCompensation()** return set value.
 - **void setADCRange(bool flag)** flag = false => 164 mV, true => 41 mV
-- **bool getADCRange()** return set value.
+- **bool getADCRange()** return set value from cache.
 
 TODO: wrapper + better name for setAccumulation().
 
