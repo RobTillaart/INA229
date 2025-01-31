@@ -145,7 +145,7 @@ float INA229::getShuntVoltage()
   return voltage;
 }
 
-int32_t INA229::getShuntVoltageADCValue()
+int32_t INA229::getShuntVoltageRAW()
 {
   //  remove reserved bits.
   uint32_t value = _readRegister(INA229_SHUNT_VOLTAGE, 3) >> 4;
@@ -153,10 +153,6 @@ int32_t INA229::getShuntVoltageADCValue()
   if (value & 0x00080000)
   {
     value |= 0xFFF00000;
-  }
-  if (_ADCRange == true)
-  {
-    value /= 4;
   }
   return (int32_t)value;
 }

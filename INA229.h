@@ -124,7 +124,7 @@ public:
   float    getShuntMicroVolt()  { return getShuntVoltage() * 1e6; };
 
   //  raw integer interface.
-  int32_t  getShuntVoltageADCValue();
+  int32_t  getShuntVoltageRAW();
 
 
   //       SHUNT CURRENT

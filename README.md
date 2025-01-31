@@ -199,8 +199,8 @@ Note the value can be positive or negative as the INA229 is bidirectional.
 - **float getShuntVolt()**
 - **float getShuntMilliVolt()**
 - **float getShuntMicroVolt()**
-- **int32_t getShuntVoltageADCValue()** integer version requested in issue #3.
-Returns raw ADC bits, converted for ADCrange.
+- **int32_t getShuntVoltageRAW()** integer version requested in issue #3.
+Returns raw ADC value, 20 bits with sign extended.
 
 ### SHUNT CURRENT
 
