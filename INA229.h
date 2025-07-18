@@ -1,7 +1,7 @@
 #pragma once
 //    FILE: INA229.h
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.4.0
+// VERSION: 0.4.1
 //    DATE: 2025-01-22
 // PURPOSE: Arduino library for the INA229, SPI, 20 bit, voltage, current and power sensor.
 //     URL: https://github.com/RobTillaart/INA229
@@ -13,7 +13,7 @@
 #include "SPI.h"
 
 
-#define INA229_LIB_VERSION          (F("0.4.0"))
+#define INA229_LIB_VERSION          (F("0.4.1"))
 
 
 #ifndef __SPI_CLASS__
@@ -125,8 +125,7 @@ public:
 
   //  raw integer interface.
   int32_t  getShuntVoltageRAW();
-
-
+  
   //       SHUNT CURRENT
   float    getCurrent();        //  Ampere
   float    getAmpere()          { return getCurrent(); };
@@ -159,6 +158,7 @@ public:
   double   getCoulomb()         { return getCharge(); };
   double   getMilliCoulomb()    { return getCharge()       * 1e3; };
   double   getMicroCoulomb()    { return getCharge()       * 1e6; };
+
 
   //
   //  CONFIG REGISTER 0
@@ -213,6 +213,7 @@ public:
   uint16_t getShuntTemperatureCoefficent();
 
 
+  //
   //  DIAGNOSE ALERT REGISTER 11  (0x0B)
   //  read datasheet for details, section 7.6.1.12, page 26++.
   //
