@@ -125,7 +125,7 @@ public:
 
   //  raw integer interface.
   int32_t  getShuntVoltageRAW();
-  
+
   //       SHUNT CURRENT
   float    getCurrent();        //  Ampere
   float    getAmpere()          { return getCurrent(); };
@@ -204,6 +204,8 @@ public:
   float    getMaxCurrent();
   float    getShunt();
   float    getCurrentLSB();
+  float    getCurrentLSB_mA() { return _current_LSB * 1e3; };
+  float    getCurrentLSB_uA() { return _current_LSB * 1e6; };
 
   //
   //  SHUNT TEMPERATURE COEFFICIENT REGISTER 3

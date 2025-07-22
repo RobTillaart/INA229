@@ -367,6 +367,8 @@ The shunt should be 0.0001 Ω and up.
 - **float getMaxCurrent()** return set value.
 - **float getShunt()** return set value.
 - **float getCurrentLSB()** return actual currenLSB. 0.0 means not calibrated.
+- **float getCurrentLSB_mA()** idem.
+- **float getCurrentLSB_uA()** idem.
 
 
 ### Shunt temperature coefficient
