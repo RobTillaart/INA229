@@ -269,18 +269,19 @@ bool INA229::getTemperatureCompensation()
 }
 
 //  PAGE 20
-void INA229::setADCRange(bool flag)
+bool INA229::setADCRange(bool flag)
 {
   uint16_t value = _readRegister(INA229_CONFIG, 2);
   _ADCRange = (value & INA229_CFG_ADCRANGE) > 0;
   //  nothing changed ==> we're done.
-  if (flag == _ADCRange) return;
+  if (flag == _ADCRange) return true;
   _ADCRange = flag;
   if (flag) value |= INA229_CFG_ADCRANGE;
   else      value &= ~INA229_CFG_ADCRANGE;
   _writeRegister(INA229_CONFIG, value);
   //  INA228, #26 
-  setMaxCurrentShunt(getMaxCurrent(), getShunt());
+  bool rv = setMaxCurrentShunt(getMaxCurrent(), getShunt()) == 0;
+  return rv;
 }
 
 bool INA229::getADCRange()

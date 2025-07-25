@@ -280,8 +280,9 @@ Read datasheet for details, section 7.6.1.1, page 22
 - **uint8_t getConversionDelay()** return set value.
 - **void setTemperatureCompensation(bool on)** see Shunt temperature coefficient below.
 - **bool getTemperatureCompensation()** return set value.
-- **void setADCRange(bool flag)** flag = false => 164 mV, true => 41 mV
+- **bool setADCRange(bool flag)** flag = false => 164 mV, true => 41 mV
 Since 0.4.1 setADCRange() calls setMaxCurrentShunt() to update the internal LSB values.
+Returns false on failure of setMaxCurrentShunt().
 - **bool getADCRange()** return set value.
 
 TODO: wrapper + better name for setAccumulation().
